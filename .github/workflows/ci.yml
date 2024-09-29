@@ -12,7 +12,6 @@ on:
       - "Package.swift"
       - "Source/**"
       - "Tests/**"
-
 jobs:
   SwiftLint:
     runs-on: ubuntu-latest
@@ -23,71 +22,54 @@ jobs:
         with:
           args: --strict
         env:
-          
           DIFF_BASE: ${{ github.base_ref }}
-          
-
-  
   macOS:
-    
     name: ${{ matrix.name }}
     runs-on: ${{ matrix.runsOn }}
-    
     env:
-      
       DEVELOPER_DIR: "/Applications/${{ matrix.xcode }}.app/Contents/Developer"
-      
     timeout-minutes: 20
     strategy:
       fail-fast: false
       matrix:
         include:
+          - xcode: "Xcode_16.0"
+            runsOn: macos-14
+            name: "macOS 14, Xcode 16.0, Swift 6.0"
+            testPlan: "macOS"
+          - xcode: "Xcode_15.4"
+            runsOn: macos-14
+            name: "macOS 14, Xcode 15.4, Swift 5.10"
+            testPlan: "macOS"
+          - xcode: "Xcode_15.2"
+            runsOn: macos-13
+            name: "macOS 14, Xcode 15.2, Swift 5.9.2"
+          - xcode: "Xcode_15.1"
+            runsOn: macOS-13
+            name: "macOS 14, Xcode 15.1, Swift 5.9.1"
+            testPlan: "macOS"
           - xcode: "Xcode_15.0"
             runsOn: macos-13
             name: "macOS 13, Xcode 15.0, Swift 5.9.0"
-          - xcode: "Xcode_14.3.1"
-            runsOn: macos-13
-            name: "macOS 13, Xcode 14.3.1, Swift 5.8.0"
-          - xcode: "Xcode_14.2"
-            runsOn: macOS-12
-            name: "macOS 12, Xcode 14.2, Swift 5.7.2"
-          - xcode: "Xcode_14.1"
-            runsOn: macOS-12
-            name: "macOS 12, Xcode 14.1, Swift 5.7.1"
     steps:
       - uses: actions/checkout@v3
-      
       - name: ${{ matrix.name }}
-        run: xcodebuild test -scheme "{{ cookiecutter.name }}" -destination "platform=macOS" clean -enableCodeCoverage YES -resultBundlePath "test_output/${{ matrix.name }}.xcresult" || exit 1
-      
+        run: xcodebuild test -scheme "BuilderMacroClient" -destination "platform=macOS" clean -enableCodeCoverage YES -resultBundlePath "test_output/${{ matrix.name }}.xcresult" || exit 1
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v3.1.0
         with:
-          
           token: ${{ secrets.CODECOV_TOKEN }}
-          
           xcode: true
-          
           xcode_archive_path: test_output/${{ matrix.name }}.xcresult
-          
       - uses: actions/upload-artifact@v4
         with:
-          
           name: ${{ matrix.name }}
-          
           path: test_output
-  
-
-  
   iOS:
-    
     name: ${{ matrix.name }}
     runs-on: ${{ matrix.runsOn }}
-    
     env:
-      
       DEVELOPER_DIR: "/Applications/${{ matrix.xcode }}.app/Contents/Developer"
-      
     timeout-minutes: 20
     strategy:
       fail-fast: false
@@ -103,28 +85,17 @@ jobs:
             runsOn: macos-13
     steps:
       - uses: actions/checkout@v3
-        
       - name: ${{ matrix.name }}
-        run: xcodebuild test -scheme "{{ cookiecutter.name }}" -destination "${{ matrix.destination }}" clean -enableCodeCoverage YES -resultBundlePath "test_output/${{ matrix.name }}.xcresult" || exit 1
-        
+        run: xcodebuild test -scheme "BuilderMacroClient" -destination "${{ matrix.destination }}" clean -enableCodeCoverage YES -resultBundlePath "test_output/${{ matrix.name }}.xcresult" || exit 1
       - uses: actions/upload-artifact@v4
         with:
-          
           name: ${{ matrix.name }}
           path: test_output
-          
-  
-
-  
   tvOS:
-    
     name: ${{ matrix.name }}
     runs-on: ${{ matrix.runsOn }}
-    
     env:
-      
       DEVELOPER_DIR: "/Applications/${{ matrix.xcode }}.app/Contents/Developer"
-      
     timeout-minutes: 20
     strategy:
       fail-fast: false
@@ -140,38 +111,23 @@ jobs:
             runsOn: macos-13
     steps:
       - uses: actions/checkout@v3
-      
       - name: ${{ matrix.name }}
-        run: xcodebuild test -scheme "{{ cookiecutter.name }}" -destination "${{ matrix.destination }}" clean -enableCodeCoverage YES -resultBundlePath "test_output/${{ matrix.name }}.xcresult" || exit 1
-      
+        run: xcodebuild test -scheme "BuilderMacroClient" -destination "${{ matrix.destination }}" clean -enableCodeCoverage YES -resultBundlePath "test_output/${{ matrix.name }}.xcresult" || exit 1
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v3.1.0
         with:
-          
           token: ${{ secrets.CODECOV_TOKEN }}
-          
           xcode: true
-          
           xcode_archive_path: test_output/${{ matrix.name }}.xcresult
-          
       - uses: actions/upload-artifact@v4
         with:
-          
           name: ${{ matrix.name }}
-          
           path: test_output
-  
-
-  
   watchOS:
-    
     name: ${{ matrix.name }}
     runs-on: ${{ matrix.runsOn }}
-    
     env:
-      
       DEVELOPER_DIR: "/Applications/${{ matrix.xcode }}.app/Contents/Developer"
-      
     timeout-minutes: 20
     strategy:
       fail-fast: false
@@ -191,37 +147,23 @@ jobs:
             runsOn: macos-13
     steps:
       - uses: actions/checkout@v3
-      
       - name: ${{ matrix.name }}
-        run: xcodebuild test -scheme "{{ cookiecutter.name }}" -destination "${{ matrix.destination }}" clean -enableCodeCoverage YES -resultBundlePath "test_output/${{ matrix.name }}.xcresult" || exit 1
-      
+        run: xcodebuild test -scheme "BuilderMacroClient" -destination "${{ matrix.destination }}" clean -enableCodeCoverage YES -resultBundlePath "test_output/${{ matrix.name }}.xcresult" || exit 1
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v3.1.0
         with:
-          
           token: ${{ secrets.CODECOV_TOKEN }}
-          
           xcode: true
-          
           xcode_archive_path: test_output/${{ matrix.name }}.xcresult
-          
       - uses: actions/upload-artifact@v4
         with:
-          
           name: ${{ matrix.name }}
-          
           path: test_output
-  
-
   spm:
-    
     name: ${{ matrix.name }}
     runs-on: ${{ matrix.runsOn }}
-    
     env:
-      
       DEVELOPER_DIR: "/Applications/${{ matrix.xcode }}.app/Contents/Developer"
-      
     timeout-minutes: 20
     strategy:
       fail-fast: false
@@ -235,9 +177,8 @@ jobs:
             runsOn: macos-13
     steps:
       - uses: actions/checkout@v3
-      
       - name: ${{ matrix.name }}
-        run: swift build -c release --target "{{ cookiecutter.name }}"
+        run: swift build -c release --target "BuilderMacro"
       
   merge-test-reports:
     needs: [iOS, macOS, watchOS, tvOS]
