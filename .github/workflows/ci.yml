@@ -16,7 +16,7 @@ jobs:
   SwiftLint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: GitHub Action for SwiftLint
         uses: norio-nomura/action-swiftlint@3.2.1
         with:
@@ -49,7 +49,7 @@ jobs:
             runsOn: macos-13
             name: "macOS 13, Xcode 15.0, Swift 5.9.0"
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: ${{ matrix.name }}
         run: xcodebuild test -scheme "BuilderMacroClient" -destination "platform=macOS" clean -enableCodeCoverage YES -resultBundlePath "test_output/${{ matrix.name }}.xcresult" || exit 1
       - name: Upload coverage reports to Codecov
@@ -85,7 +85,7 @@ jobs:
             xcode: "Xcode_15.0.1"
             runsOn: macOS-14
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: ${{ matrix.name }}
         run: xcodebuild test -scheme "BuilderMacroClient" -destination "${{ matrix.destination }}" clean -enableCodeCoverage YES -resultBundlePath "test_output/${{ matrix.name }}.xcresult" || exit 1
       - uses: actions/upload-artifact@v4
@@ -115,7 +115,7 @@ jobs:
             xcode: "Xcode_15.0.1"
             runsOn: macOS-14
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: ${{ matrix.name }}
         run: xcodebuild test -scheme "BuilderMacroClient" -destination "${{ matrix.destination }}" clean -enableCodeCoverage YES -resultBundlePath "test_output/${{ matrix.name }}.xcresult" || exit 1
       - name: Upload coverage reports to Codecov
@@ -151,7 +151,7 @@ jobs:
             xcode: "Xcode_15.0.1"
             runsOn: macOS-14
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: ${{ matrix.name }}
         run: xcodebuild test -scheme "BuilderMacroClient" -destination "${{ matrix.destination }}" clean -enableCodeCoverage YES -resultBundlePath "test_output/${{ matrix.name }}.xcresult" || exit 1
       - name: Upload coverage reports to Codecov
@@ -187,7 +187,7 @@ jobs:
             runsOn: macOS-14
             name: "macOS 14, SPM 5.9.0 Test"
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: ${{ matrix.name }}
         run: swift build -c release --target "BuilderMacro"
       
