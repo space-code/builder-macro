@@ -1,23 +1,19 @@
+![BuilderMacro is a macro that implements the Builder design pattern in Swift](https://raw.githubusercontent.com/space-code/builder-macro/dev/Resources/builder-macro.png)
+
 <h1 align="center" style="margin-top: 0px;">builder-macro</h1>
 
 <p align="center">
 <a href="https://github.com/space-code/builder-macro/blob/main/LICENSE"><img alt="License" src="https://img.shields.io/github/license/space-code/builder-macro?style=flat"></a> 
 <a href="https://swiftpackageindex.com/space-code/builder-macro"><img alt="Swift Compatibility" src="https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fspace-code%2Fbuilder-macro%2Fbadge%3Ftype%3Dswift-versions"/></a> 
 <a href="https://swiftpackageindex.com/space-code/builder-macro"><img alt="Platform Compatibility" src="https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fspace-code%2Fbuilder-macro%2Fbadge%3Ftype%3Dplatforms"/></a> 
+<a href="https://codecov.io/gh/space-code/builder-macro"><img alt="CodeCov" src="https://codecov.io/gh/space-code/builder-macro/graph/badge.svg?token=0N0jMJnozP"></a>
 <a href="https://github.com/space-code/builder-macro"><img alt="CI" src="https://github.com/space-code/builder-macro/actions/workflows/ci.yml/badge.svg?branch=main"></a>
-
-<a href="https://github.com/space-code/builder-macro"><img alt="Number of GitHub contributors" src="https://img.shields.io/github/issues/space-code/builder-macro"></a>
-<a href="https://github.com/space-code/builder-macro"><img alt="Number of GitHub issues that are open" src="https://img.shields.io/github/stars/space-code/builder-macro"></a>
-<a href="https://github.com/space-code/builder-macro"><img alt="Number of GitHub closed issues" src="https://img.shields.io/github/issues-closed/space-code/builder-macro"></a>
-<a href="https://github.com/space-code/builder-macro"><img alt="Number of GitHub stars" src="https://img.shields.io/github/contributors/space-code/builder-macro"></a>
-<a href="https://github.com/space-code/builder-macro"><img alt="Number of GitHub pull requests that are open" src="https://img.shields.io/github/issues-pr-raw/space-code/builder-macro"></a>
-
 <a href="https://github.com/space-code/builder-macro"><img alt="GitHub release; latest by date" src="https://img.shields.io/github/v/release/space-code/builder-macro"></a>
 <a href="https://github.com/apple/swift-package-manager" alt="builder-macro on Swift Package Manager" title="builder-macro on Swift Package Manager"><img src="https://img.shields.io/badge/Swift%20Package%20Manager-compatible-brightgreen.svg" /></a>
 </p>
 
 ## Description
-`builder-macro` description.
+`builder-macro` is a macro that implements the Builder design pattern in Swift.
 
 - [Usage](#usage)
 - [Requirements](#requirements)
@@ -28,8 +24,114 @@
 - [License](#license)
 
 ## Usage
+```swift
+import BuilderMacro
+
+@Builder
+struct Person {
+    let id: UUID
+    let name: String
+    let bday: Date
+}
+
+// Expanded
+
+struct Person {
+    let firstName: String, let lastName: String, let middleName: String
+    let birthday: Date
+    let city: String
+
+    struct PersonBuilder {
+        var firstName: String?
+        var lastName: String?
+        var middleName: String?
+        var birthday: Date?
+        var city: String?
+
+        func firstName(_ firstName: String) -> Self {
+            var copy = self
+            copy.firstName = firstName
+            return copy
+        }
+
+        func lastName(_ lastName: String) -> Self {
+            var copy = self
+            copy.lastName = lastName
+            return copy
+        }
+
+        func middleName(_ middleName: String) -> Self {
+            var copy = self
+            copy.middleName = middleName
+            return copy
+        }
+
+        func birthday(_ birthday: Date) -> Self {
+            var copy = self
+            copy.birthday = birthday
+            return copy
+        }
+
+        func city(_ city: String) -> Self {
+            var copy = self
+            copy.city = city
+            return copy
+        }
+
+        enum BuildError: Swift.Error {
+            case missingRequiredField(description: String)
+        }
+
+        func build() throws -> Person {
+            guard let firstName = firstName else {
+                throw BuildError.missingRequiredField(description: "firstName")
+            }
+
+            guard let lastName = lastName else {
+                throw BuildError.missingRequiredField(description: "lastName")
+            }
+
+            guard let middleName = middleName else {
+                throw BuildError.missingRequiredField(description: "middleName")
+            }
+
+            guard let birthday = birthday else {
+                throw BuildError.missingRequiredField(description: "birthday")
+            }
+
+            guard let city = city else {
+                throw BuildError.missingRequiredField(description: "city")
+            }
+
+            return Person(
+                firstName: firstName,
+                lastName: lastName,
+                middleName: middleName,
+                birthday: birthday,
+                city: city
+            )
+        }
+    }
+}
+```
+
+If a property type is optional, you can force validation of nil values by passing the addGuards parameter to the builder macro like this::
+
+```swift
+import BuilderMacro
+
+@Builder(addGuards: true)
+struct Person {
+    let id: UUID
+    let name: String
+    let bday: Date
+}
+```
 
 ## Requirements
+- iOS 13.0+ / macOS 10.15+ / tvOS 13.0+ / watchOS 6.0+
+- Xcode 15.0
+- Swift 5.9
 
 ## Installation
 ### Swift Package Manager
