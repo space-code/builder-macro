@@ -9,7 +9,7 @@ import Foundation
 
 struct TypedVariable {
     let name: String
-    let type: String
+    let type: VariableType
 
     var initAssignment: String {
         "\(name): \(name)"
@@ -33,5 +33,14 @@ extension [TypedVariable] {
     var guardAssignment: String {
         map(\.guardAssignment)
             .joined(separator: "\n\n")
+    }
+}
+
+// MARK: - TypedVariable.VariableType
+
+extension TypedVariable {
+    struct VariableType {
+        let value: String
+        let isOptional: Bool
     }
 }
