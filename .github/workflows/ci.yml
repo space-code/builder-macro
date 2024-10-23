@@ -51,9 +51,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: ${{ matrix.name }}
-        run: xcodebuild test -scheme "BuilderMacroClient" -destination "platform=macOS" clean -enableCodeCoverage YES -resultBundlePath "test_output/${{ matrix.name }}.xcresult" || exit 1
+        run: xcodebuild test -scheme "BuilderMacro-Package" -destination "platform=macOS" clean -enableCodeCoverage YES -resultBundlePath "test_output/${{ matrix.name }}.xcresult" || exit 1
       - name: Upload coverage reports to Codecov
-        uses: codecov/codecov-action@v4.6.0
+        uses: codecov/codecov-action@v4.5.0
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           xcode: true
@@ -87,7 +87,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: ${{ matrix.name }}
-        run: xcodebuild test -scheme "BuilderMacroClient" -destination "${{ matrix.destination }}" clean -enableCodeCoverage YES -resultBundlePath "test_output/${{ matrix.name }}.xcresult" || exit 1
+        run: xcodebuild test -scheme "BuilderMacro-Package" -destination "${{ matrix.destination }}" clean -enableCodeCoverage YES -resultBundlePath "test_output/${{ matrix.name }}.xcresult" || exit 1
       - uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.name }}
@@ -117,9 +117,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: ${{ matrix.name }}
-        run: xcodebuild test -scheme "BuilderMacroClient" -destination "${{ matrix.destination }}" clean -enableCodeCoverage YES -resultBundlePath "test_output/${{ matrix.name }}.xcresult" || exit 1
+        run: xcodebuild test -scheme "BuilderMacro-Package" -destination "${{ matrix.destination }}" clean -enableCodeCoverage YES -resultBundlePath "test_output/${{ matrix.name }}.xcresult" || exit 1
       - name: Upload coverage reports to Codecov
-        uses: codecov/codecov-action@v4.6.0
+        uses: codecov/codecov-action@v4.5.0
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           xcode: true
@@ -153,9 +153,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: ${{ matrix.name }}
-        run: xcodebuild test -scheme "BuilderMacroClient" -destination "${{ matrix.destination }}" clean -enableCodeCoverage YES -resultBundlePath "test_output/${{ matrix.name }}.xcresult" || exit 1
+        run: xcodebuild test -scheme "BuilderMacro-Package" -destination "${{ matrix.destination }}" clean -enableCodeCoverage YES -resultBundlePath "test_output/${{ matrix.name }}.xcresult" || exit 1
       - name: Upload coverage reports to Codecov
-        uses: codecov/codecov-action@v4.6.0
+        uses: codecov/codecov-action@v4.5.0
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           xcode: true
